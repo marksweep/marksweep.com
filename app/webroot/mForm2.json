@@ -1,0 +1,503 @@
+{
+    "form": {
+        "_id": "1",
+        "name": "Keirsey Tempermant Scorer",
+        "description": "This is a sample description",
+        "action": "http://www.keirsey.com/sorter/instruments2.aspx?partid=0",
+        "method": "post",
+        "categories": ["Books", "Education"],
+        "createdBy": {
+            "user_id": 1,
+            "username": "spinlock",
+            "email": "spinlock96@gmail.com" 
+        },
+        "sections": [
+            {
+                "name": "Section 1",
+                "questions": [
+                    {
+                        "question": "Do you value in yourself more that you are:",
+                        "answers": ["12.2"],
+                        "type": "decimal",
+                        "allowsNegative": "N",
+                        "description": "Choose the answer that best describes you",
+                        "choices": [
+                            {
+                                "label": "reasonable",
+                                "value": "T" 
+                            },
+                            {
+                                "label": "devoted",
+                                "value": "F" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Do you consider yourself:",
+                        "type": "integer",
+                        "answers": ["12"],
+                        "allowsNull": "Y",
+                        "description": "Choose the answer that best describes you",
+                        "choices": [
+                            {
+                                "label": "a good conversationalist",
+                                "value": "E" 
+                            },
+                            {
+                                "label": "a good listener",
+                                "value": "I" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "What are your favorite colors:",
+                        "type": "choices",
+                        "description": "Choose a color",
+                        "multiple": "Y",
+                        "choices": [
+                            {
+                                "label": "Red",
+                                "value": "red" 
+                            } ,
+                            {
+                                "label": "Orange",
+                                "value": "orange" 
+                            },
+                            {
+                                "label": "Yellow",
+                                "value": "yellow" 
+                            },
+                            {
+                                "label": "Green",
+                                "value": "green" 
+                            },
+                            {
+                                "label": "Blue",
+                                "value": "blue" 
+                            },
+                            {
+                                "label": "Indigo",
+                                "value": "indigo" 
+                            },
+                            {
+                                "label": "Violet",
+                                "value": "violet" 
+                            },
+                            {
+                                "label": "Black",
+                                "value": "black" 
+                            },
+                            {
+                                "label": "White",
+                                "value": "white" 
+                            },
+                            {
+                                "label": "Pink",
+                                "value": "pink" 
+                            },
+                            {
+                                "label": "Hunter Green",
+                                "value": "hunter" 
+                            },
+                            {
+                                "label": "Rain Forest Green",
+                                "value": "rainforest" 
+                            },
+                            {
+                                "label": "The emerald isle of Ireland green",
+                                "value": "ireland" 
+                            }
+                        ] 
+                    } 
+                ] 
+            },
+            {
+				"name": "Section 2",
+                "questions": [
+                    {
+                        "question": "What is the answer to life the universe and everything:",
+                        "type": "choice",
+                        "visible": "N",
+                        "description": "Classic question",
+                        "choices": [
+                            {
+                                "label": "123",
+                                "value": "123" 
+                            },
+                            {
+                                "label": "43",
+                                "value": "43" 
+                            } ,
+                            {
+                                "label": "42",
+                                "value": "42" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who is \"Le master of disguise\":",
+                        "type": "choice",
+                        "visible": "N",
+                        "description": "From the children's show the \"Backyardigans\"",
+                        "choices": [
+                            {
+                                "label": "Pablo",
+                                "value": "Pablo" 
+                            },
+                            {
+                                "label": "Tyrone",
+                                "value": "Tyrone" 
+                            },
+                            {
+                                "label": "Uniqua",
+                                "value": "Uniqua" 
+                            },
+                            {
+                                "label": "Tasha",
+                                "value": "Tasha" 
+                            },
+                            {
+                                "label": "Austin",
+                                "value": "Austin" 
+                            } 
+                        ] 
+                    }
+                ]
+            },
+            {
+				"name": "Section 3",
+                "questions": [
+                    {
+                        "question": "Who wrote the book of love?:",
+                        "type": "text",
+                        "visible": "Y",
+                        "minChars": 23,
+                        "maxChars":25,
+                        "placeholderText": "Placeholder goes here",
+                        "description": "A song title",
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of hate?:",
+                        "type": "texts",
+                        "popoverSize": "medium",
+                        "visible": "Y",
+                        "minChars": 5,
+                        "maxChars":5,
+                        "allowsNull":"N",
+                        "description": "A song title", 
+                        "placeholderText": "Put an answer here",
+                        "answers": [ "This is the only answer. The answer is a long one but I will attempt to elaborate. When you do something this big, you want to do it right. This is the right way to do it" ],
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of envy?:",
+                        "type": "texts",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of smiling?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of love?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of hate?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of envy?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of smiling?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of love?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of hate?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of envy?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of smiling?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of love?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of hate?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of envy?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    },
+                    {
+                        "question": "Who wrote the book of smiling?:",
+                        "type": "choice",
+                        "visible": "Y",
+                        "description": "A song title", 
+                        "choices": [
+                            {
+                                "label": "The Bee Gees",
+                                "value": "1" 
+                            },
+                            {
+                                "label": "Mortimer",
+                                "value": "2" 
+                            } ,
+                            {
+                                "label": "The House",
+                                "value": "3" 
+                            } 
+                        ] 
+                    }              
+            	]
+            }
+        ] 
+    }
+}

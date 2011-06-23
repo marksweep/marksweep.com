@@ -1,0 +1,182 @@
+{
+    "form": {
+        "name": "Properties form",
+        "description": "This is used by the application internally for the questions when building properties of a mform",
+        "action": "none",
+        "method": "post",
+        "createdBy": {
+            "user_id": 1,
+            "username": "spinlock",
+            "email": "spinlock96@gmail.com" 
+        },
+        "sections": [
+            {
+                "name": "Form details",
+                "questions": [
+                    {
+                        "question": "Form name:",
+                        "answers": ["Untitled Form"],
+                        "type": "text",
+                        "allowsNull": "N",
+                        "saveAnswer": "N",
+                        "description": "Select a name for your form"
+                    },
+                    {
+                        "question": "Description:",
+                        "answers": ["Describe your form here."],
+                        "type": "texts",
+                        "allowsNull": "Y",
+                        "saveAnswer": "N",
+                        "description": "Enter an more extended description of your form here"
+                    },
+                    {
+                        "question": "Allow multiple submissions from the same device:",
+                        "type": "choice",
+                        "allowsNull": "N",
+                        "answers": ["N"],
+                        "saveAnswer": "N", 
+                        "choices": [
+                            {
+                                "label": "Books",
+                                "value": "Books" 
+                            },
+                            {
+                                "label": "Business",
+                                "value": "Business" 
+                            },
+                        "description": "Does this form allow for one device to send multiple submissions?"
+                    },
+                    {
+                        "question": "Category:",
+                        "type": "choice",
+                        "answers": [],
+                        "allowsNull": "Y",
+                        "saveAnswer": "N",
+                        "description": "Pick a category that this form falls into",
+                        "choices": [
+                            {
+                                "label": "Books",
+                                "value": "Books" 
+                            },
+                            {
+                                "label": "Business",
+                                "value": "Business" 
+                            },
+                            {
+                                "label": "Education",
+                                "value": "Education" 
+                            },
+                            {
+                                "label": "Entertainment",
+                                "value": "Entertainment" 
+                            },
+                            {
+                                "label": "Finance",
+                                "value": "Finance" 
+                            },
+                            {
+                                "label": "Games",
+                                "value": "Games" 
+                            },
+                            {
+                                "label": "Healthcare & Fitness",
+                                "value": "Healthcare" 
+                            },
+                            {
+                                "label": "Lifestyle",
+                                "value": "Lifestyle" 
+                            },
+                            {
+                                "label": "Medical",
+                                "value": "Medical" 
+                            },
+                            {
+                                "label": "Music",
+                                "value": "Music" 
+                            },
+                            {
+                                "label": "Navigation",
+                                "value": "Navigation" 
+                            },
+                            {
+                                "label": "News",
+                                "value": "News" 
+                            },
+                            {
+                                "label": "Photography",
+                                "value": "Photography" 
+                            },
+                            {
+                                "label": "Productivity",
+                                "value": "Productivity" 
+                            },
+                            {
+                                "label": "Reference",
+                                "value": "Reference" 
+                            },
+                            {
+                                "label": "Social Networking",
+                                "value": "Social Networking" 
+                            },
+                            {
+                                "label": "Sports",
+                                "value": "Sports" 
+                            },
+                            {
+                                "label": "Travel",
+                                "value": "Travel" 
+                            },
+                            {
+                                "label": "Utilities",
+                                "value": "Utilities" 
+                            },
+                            {
+                                "label": "Weather",
+                                "value": "Weather" 
+                            }
+                        ] 
+                    }
+                ] 
+            },
+            {
+                "name": "On Submit Send To:",
+                "questions": [
+                    {
+                        "question": "URL (if any):",
+                        "answers": [],
+                        "type": "text",
+                        "allowsNull": "Y",
+                        "saveAnswer": "N",
+                        "description": "Send submission to this url."
+                    },
+                    {
+                        "question": "Action:",
+                        "type": "choice",
+                        "answers": ["post"],
+                        "allowsNull": "Y",
+                        "saveAnswer": "N",
+                        "description": "Select the action to use on this url",
+                        "choices": [
+                            {
+                                "label": "GET",
+                                "value": "get" 
+                            },
+                            {
+                                "label": "POST",
+                                "value": "post" 
+                            },
+                            {
+                                "label": "PUT",
+                                "value": "put" 
+                            },
+                            {
+                                "label": "DELETE",
+                                "value": "delete" 
+                            }
+                        ] 
+                    }
+                ] 
+            }
+        ] 
+    }
+}
