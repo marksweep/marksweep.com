@@ -46,6 +46,13 @@ Connections::add('default', array(
 	'database' => 'marksweep'
 ));
 
+
+Connections::add('default', array(
+	'type' => 'MongoDb',
+ 	'host' => 'localhost',
+	'database' => 'pellucid3'
+));
+
 /**
  * Uncomment this configuration to use CouchDB as your default database.
  */
@@ -59,14 +66,14 @@ Connections::add('default', array(
 /**
  * Uncomment this configuration to use MySQL as your default database.
  */
-// Connections::add('default', array(
-// 	'type' => 'database',
-// 	'adapter' => 'MySql',
-// 	'host' => 'localhost',
-// 	'login' => 'root',
-// 	'password' => '',
-// 	'database' => 'my_app',
-// 	'encoding' => 'UTF-8'
-// ));
+Connections::add('pellucid', array(
+	'type' => 'database',
+	'adapter' => 'MySql',
+	'host' => 'localhost',
+	'login' => 'root',
+	'password' => '',
+	'database' => 'pellucid',
+	'encoding' => 'UTF-8'
+));
 
 ?>
