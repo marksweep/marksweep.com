@@ -59,15 +59,29 @@ class PellucidLoad extends \lithium\console\Command {
 		// every entity that reports on this measure
 		foreach ($measures as $measure) {
 			
-			// Exists?
-			$pellucid_measure = PellucidMeasures::first(array('conditions'=>array('_id'=>$measure->measure_id)));
-			if (!$pellucid_measure) {
-				$pellucid_measure = PellucidMeasures::create();
-			}
-			
 			$data = $measure->data();
 			$data["_id"] = $measure->measure_id;
-			$pellucid_measure->save($data);
+			
+			// Exists?
+			$pellucid_measure = PellucidMeasures::first(array(
+				'conditions' => array('_id'=>$measure->measure_id),
+				'fields' => array(
+					'_id'
+				
+				)));
+			
+			// Doesn't exist - create and save
+			if (!$pellucid_measure) {
+				$pellucid_measure = PellucidMeasures::create();
+				$pellucid_measure->save($data);
+			} else {
+			// Just update
+				PellucidMeasures::update(
+					$data,
+					array('_id' => $measure->measure_id)
+				);
+			}
+			
 
 			$data = null;
 		
@@ -95,24 +109,30 @@ class PellucidLoad extends \lithium\console\Command {
 				$entity = PellucidEntities::first(array(
 					'conditions' => array(
 						'_id' => "$entity_id"
-					)
+					),
+					'fields' => array('_id', 'EntityAttributes', 'address', 'aha_id', 'aha_service_id', 'aha_sys_id', 'aka', 'city', 'closed_date', 'county_fips', 'county_name', 'created', 'entity_id', 'entity_type', 'geo_lat', 'geo_long', 'hrr_code', 'hsa_code', 'local_id', 'modified', 'mpn_id', 'name', 'npi_id', 'phone_number', 'state', 'zipcode')
+					
 				));
 				
-				echo "Entity id: $entity_id \n";
-				//print_r($entity->data());
-			
-				// Get 8 latest values and attach footnotes
-				$values = $this->loadValues(array('measure_id' => $measure->measure_id, 'entity_id' => $entity_id), array('limit'=>2));
-				print_r($values);
+				// Do we have this entity?
+				if ($entity) {
+					//print_r($entity->data());
 				
-				// Save incrementally to the current measure
-				PellucidMeasures::update(
-					array('Entities' => array(
-						$entity->data() + array('Values' => $values)
-					)),
-					array('_id' => $measure->measure_id)
-				);
+					// Get 8 latest values and attach footnotes
+					$values = $this->loadValues(array('measure_id' => $measure->measure_id, 'entity_id' => $entity_id), array('limit'=>1));
 				
+					// Save incrementally to the current measure
+					PellucidMeasures::update(
+						array('Entities.' . $entity_id => 
+							$entity->data() + array('Values' => $values[0]['Values'])
+						),
+						array('_id' => $measure->measure_id)
+					);
+				} else {
+				
+					echo 'ERROR: Unable to locate entity_id: ' . $entity_id . "\n";
+				
+				}				
 				//$all_entities[$entity_id] = $entity->data();
 				//$all_entities[$entity_id]['Values'] = $values;
 				
@@ -121,7 +141,6 @@ class PellucidLoad extends \lithium\console\Command {
 			
 			//$data['Entities'] = $all_entities;
 			
-			break;
 		}
 	
 		
@@ -190,7 +209,6 @@ class PellucidLoad extends \lithium\console\Command {
 	 * @return void
 	 */
 	protected function loadValues($conditions = array(), $options = array()) {
-		print_r($options);
 		// Parse some options
 		$limit = null;
 		if (isset($options['limit'])) {
@@ -203,7 +221,7 @@ class PellucidLoad extends \lithium\console\Command {
 		
 		$values = EntityValues::all(array(
 			'conditions' => $conditions,
-			'order' => array('measure_id'=>'asc', 'date_end' => 'asc'),
+			'order' => array('measure_id'=>'asc', 'date_end' => 'desc'),
 			'limit' => $limit
 		));
 		$indexed_values = array();
@@ -278,6 +296,7 @@ class PellucidLoad extends \lithium\console\Command {
 		// If we are not grouping by measures
 		// This is the DEFAULT
 		} else {
+			$indexed_values = Set::combine($indexed_values, '/date_range', '/');
 			$all_values[] = array(
 				'Values' => $indexed_values,
 				'Latest' => $latest_date_end_value
