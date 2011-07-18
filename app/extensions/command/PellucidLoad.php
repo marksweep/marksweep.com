@@ -27,7 +27,7 @@ class PellucidLoad extends \lithium\console\Command {
 		
 		// TODO Make this splittable by command so you can run multiple chunks on 
 		// different threads
-		//$this->loadHospitals($command);
+		$this->loadHospitals($command);
 		
 		$this->loadMeasures($command);
 		
@@ -119,12 +119,20 @@ class PellucidLoad extends \lithium\console\Command {
 					//print_r($entity->data());
 				
 					// Get 8 latest values and attach footnotes
-					$values = $this->loadValues(array('measure_id' => $measure->measure_id, 'entity_id' => $entity_id), array('limit'=>1));
+					//$values = $this->loadValues(array('measure_id' => $measure->measure_id, 'entity_id' => $entity_id), array('limit'=>1));
 				
 					// Save incrementally to the current measure
+					/*
 					PellucidMeasures::update(
 						array('Entities.' . $entity_id => 
 							$entity->data() + array('Values' => $values[0]['Values'])
+						),
+						array('_id' => $measure->measure_id)
+					);
+					*/
+					PellucidMeasures::update(
+						array('Entities.' . $entity_id => 
+							$entity->data()
 						),
 						array('_id' => $measure->measure_id)
 					);
@@ -132,7 +140,8 @@ class PellucidLoad extends \lithium\console\Command {
 				
 					echo 'ERROR: Unable to locate entity_id: ' . $entity_id . "\n";
 				
-				}				
+				}		
+					
 				//$all_entities[$entity_id] = $entity->data();
 				//$all_entities[$entity_id]['Values'] = $values;
 				
@@ -169,7 +178,8 @@ class PellucidLoad extends \lithium\console\Command {
 
 			// Write this data out to mongo
 			$data = $hospital->data();
-			$data['_id'] = $data['entity_id'];
+			$entity_id = $data['entity_id'];
+			$data['_id'] = $entity_id;
 					
 			// Grab any attribtues associated with this hospital
 			$attributes = EntityHospitalAttributes::all(array('conditions'=>array()));
@@ -191,8 +201,26 @@ class PellucidLoad extends \lithium\console\Command {
 			
 			// Grab values associated with this entity and
 			// linked to measure information
-			$data['Measures'] = $this->loadValues(array('entity_id' => $data['_id']), array('attachMeasures'=>true));
+			//$data['Measures'] = $this->loadValues(array('entity_id' => $data['_id']), array('attachMeasures'=>true));
 			
+			// Find the measures for this entity
+			$measures = $this->findReportedMeasures($entity_id);
+			
+			// Loop through the measures for each hospital
+			foreach ($measures as $measure_id) {
+				$data['Measures'][$measure_id . '|' . $entity_id] = $this->loadEntityValues($entity_id, $measure_id);
+				
+				// Lookup the measure information
+				$measure_info = Measures::first(array(
+					'conditions' => array(
+						'measure_id' => $measure_id
+					)
+				));
+				$data['Measures'][$measure_id . '|' . $entity_id]['Measure'] = $measure_info->data();
+				
+			}
+			
+			print_r($data);
 			$entity->save($data);
 		}
 		echo 'End hospital loop: ' . time() . "\n";
@@ -201,6 +229,98 @@ class PellucidLoad extends \lithium\console\Command {
 	}
 	
 	
+	/**
+	 * findReportedMeasures function.
+	 * 
+	 * @access protected
+	 * @param mixed $entity_id
+	 * @return void
+	 */
+	protected function findReportedMeasures($entity_id) {
+	
+		$values = EntityValues::all(array(
+			'conditions' => array(
+				'entity_id' => $entity_id
+			),
+			'fields' => array('measure_id')
+		));
+		$measure_ids = null;
+		if ($values) {
+			$measure_ids = Set::extract($values->data(), '/measure_id');
+			print_r($measure_ids);
+		} 
+		return $measure_ids;
+	}
+	
+	
+	/**
+	 * loadEntityValues function
+	 * Loads up the entities values by measure_id
+	 *
+	 */
+	protected function loadEntityValues($entity_id, $measure_id, $options = array()) {
+	
+		// Parse some options
+		$limit = null;
+		if (isset($options['limit'])) {
+			$limit = $options['limit'];
+		}
+		$conditions = array();
+		if (isset($options['additional_conditions'])){
+			$conditions = $options['additional_conditions'];
+		}
+		
+		$conditions['measure_id'] = $measure_id;
+		$conditions['entity_id'] = $entity_id;
+		
+		// Grab all the values for this measure/ entity combination
+		$values = EntityValues::all(array(
+			'conditions' => $conditions,
+			'order' => array('date_end' => 'desc', 'date_start' => 'desc')
+		));
+		$indexed_values = array();
+		
+		// Create some variables to store the latest value for a given
+		// measure/entity combination
+		$latest_date_end = null;
+		$latest_date_end_value = null;
+		
+		// Create date_end/date_start indexes for all the values for easy reference
+		foreach ($values as $id => $value) {
+			$daterange = $value->date_end . '|' . $value->date_start;
+			$indexed_values[$daterange] = $value->data();
+			
+			// Grab footnotes for each value
+			$footnotes = FootnotesValues::all(
+				array('conditions'=> array(
+					'measure_id' => $value->measure_id,
+					'entity_id' => $value->entity_id,
+					'date_start' => $value->date_start,
+					'date_end' => $value->date_end
+				), 'fields' => array(
+					'footnote_id'
+				))
+			);
+			
+			$indexed_values[$daterange]['Footnotes'] = $footnotes->data();
+			
+			// Check to see if we should update the latest date end
+			if (!isset($latest_date_end) || $indexed_values[$daterange]['date_end'] > $latest_date_end) {
+				$latest_date_end = $indexed_values[$daterange]['date_end'];
+				$latest_date_end_value = $indexed_values[$daterange];
+			}
+		}
+		
+		// Attach latest value
+		$indexed_values['Latest'] = $latest_date_end_value;
+		
+		// Collate the values together
+		$all_values['Values'] = $indexed_values;
+		
+		return $all_values;
+		
+	} 
+	 
 	/**
 	 * loadValues function.
 	 * 
@@ -227,19 +347,15 @@ class PellucidLoad extends \lithium\console\Command {
 		$indexed_values = array();
 		
 		// Create date_end/date_start for all the values
-		$latest_date_end = null;
+		$latest_date_end = array();
 		$latest_date_end_value = null;
 		
 		foreach($values as $id => $value){
+			
 			$indexed_values[$id] = $value->data();
 			$indexed_values[$id]['date_range'] = $indexed_values[$id]['date_end'] . '|' . $indexed_values[$id]['date_start'];
 			
-			// Track the latest date_end found
-			if ($indexed_values[$id]['date_end'] > $latest_date_end) {
-				$latest_date_end = $indexed_values[$id]['date_end'];
-				$latest_date_end_value = $indexed_values[$id];
-			
-			}
+			$measure_id = $indexed_values[$id]['measure_id'];
 			
 			// Find and attach footnotes
 			$footnotes = FootnotesValues::all(
@@ -252,6 +368,12 @@ class PellucidLoad extends \lithium\console\Command {
 					'footnote_id'
 				))
 			);
+			// Track the latest date_end found per measure
+			if (!isset($latest_date_end[$measure_id]) || $indexed_values[$id]['date_end'] > $latest_date_end[$measure_id]) {
+				$latest_date_end[$measure_id] = $indexed_values[$id]['date_end'];
+				$latest_date_end_value[$measure_id] = $indexed_values[$id];
+				$latest_date_end_value[$measure_id]['Footnotes'] = $footnotes->data();
+			}
 			
 			$indexed_values[$id]['Footnotes'] = $footnotes->data();
 		}
@@ -289,7 +411,7 @@ class PellucidLoad extends \lithium\console\Command {
 				);
 				
 				// Measures are large array
-				$all_values[] = $measure->data() + array('Values' => $combined_values[$measure_id]) + array('Latest' => $latest_date_end_value);
+				$all_values[$measure_id . '|' . $entity_id] = $measure->data() + array('Values' => $combined_values[$measure_id]) + array('Latest' => $latest_date_end_value[$measure_id]);
 				
 			}
 			
@@ -299,7 +421,7 @@ class PellucidLoad extends \lithium\console\Command {
 			$indexed_values = Set::combine($indexed_values, '/date_range', '/');
 			$all_values[] = array(
 				'Values' => $indexed_values,
-				'Latest' => $latest_date_end_value
+				'Latest' => $latest_date_end_value[$measure_id]
 			);
 		}
 		
